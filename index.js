@@ -1,8 +1,8 @@
 // importing express
 const express = require("express");
 const dotenv = require("dotenv");
-const mongoose = require("mongoose");
-const connectDB = require("./database/database");
+const connectDb = require("./database/database");
+const cors = require("cors");
 
 // Creating an express app
 const app = express();
@@ -10,16 +10,30 @@ const app = express();
 // json Config
 app.use(express.json());
 
+//Cors config
+const corsOptions = {
+  origin: true,
+  credentials: true,
+  optionSuccessStatus: 200,
+};
+
+app.use(cors(corsOptions));
+
 // configuration dotenv
 dotenv.config();
 
 // Connecting to the database
-connectDB();
+connectDb();
 // Defining the port
 const PORT = process.env.PORT;
 
 // Creating a test route or endpoint
 app.get("/test", (req, res) => {
+  res.send("Test Api is working...!");
+});
+
+// Creating a test route or endpoint
+app.get("/test_new", (req, res) => {
   res.send("Test Api is working...!");
 });
 

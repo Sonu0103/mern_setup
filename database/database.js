@@ -1,16 +1,8 @@
-//  Write a Function
-// Importing pacakages
-// Always export the function
-
-// 1. Importing the packages
 const mongoose = require("mongoose");
 
-// 2. Creating a function
-const connectDB = () => {
+const connectDb = () =>
   mongoose.connect(process.env.MONGODB_CLOUDURL).then(() => {
-    console.log("Database Connected Sucessfully");
+    console.log("database connected sucessfully");
   });
-};
 
-// 3. Exporting the function
-module.exports = connectDB;
+module.exports = connectDb;
