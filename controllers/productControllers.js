@@ -1,66 +1,91 @@
 // Make a function (logic)
 const productModels = require("../models/productModels");
-const bcrypt = require("bcrypt");
+// const bcrypt = require("bcrypt");
 // 1. Creating User Function
 
 const createProduct = async (req, res) => {
   console.log(req.body);
+  console.log(req.files);
 
   //#. Destructuring
-  const { Name, description, price, category } = req.body;
-  //2. Validation
-  //2.1 If not : Send the reponse and stop the process
+  const { productName, productDescription, productPrice, productCategory } =
+    req.body;
+  //   //2. Validation
+  //   //2.1 If not : Send the reponse and stop the process
 
-  if (!Name || !description || !price || !category) {
-    return res.json({
+  if (
+    !productName ||
+    !productDescription ||
+    !productPrice ||
+    !productCategory
+  ) {
+    return res.status(400).json({
       success: false,
       message: "Please enter all fields!",
     });
   }
 
-  // Try - Catch (Error Handling)
-  try {
-    //4. Check existing product
-    //check if the user is already exists
-    const existingProduct = await productModels.findOne({ Name: Name });
-
-    //4.1 if yes : Send response and stop the process
-    if (existingProduct) {
-      return res.json({
-        success: false,
-        message: "Product already exists!",
-      });
-    }
-    //5. if not:
-  } catch (error) {
-    console.log(error);
-    res.json({
+  // check product image
+  if (!req.files || !req.files.productImage) {
+    return res.status(400).json({
       success: false,
-      message: "Internal Server Error!",
+      message: "Image not Found!!",
     });
   }
 
-  // Hash/encrypt the password
-  const randomSalt = await bcrypt.genSalt(10);
-  const hashPassword = await bcrypt.hash(password, randomSalt);
+  const { productImage } = req.files;
 
-  //If proper data
-  const newProduct = new productModels({
-    //fields : valuse reciveced from user
-    Name: Name,
-    description: description,
-    price: price,
-    category: hashPassword,
-  });
+  // Uploading
+  // 1. Generating unique name for each file
+  const imageName = `${Date.now()}-${productImage.name}`;
+  // 2. Define Specific Path
+  // 3. Upload to that path (await | trycatch)
 
-  //6. Save in the database
-  await newProduct.save();
+  //   // Try - Catch (Error Handling)
+  //   else
+  //     try {
+  //       //4. Check existing product
+  //       //check if the user is already exists
+  //       const existingProduct = await productModels.findOne({ Name: Name });
 
-  //7. Send a success reponse
-  res.json({
-    success: true,
-    message: "Product Created successfully!",
-  });
+  //       //4.1 if yes : Send response and stop the process
+  //       if (existingProduct) {
+  //         return res.json({
+  //           success: false,
+  //           message: "Product already exists!",
+  //         });
+  //       }
+  //       //5. if not:
+  //     } catch (error) {
+  //       console.log(error);
+  //       res.json({
+  //         success: false,
+  //         message: "Internal Server Error!",
+  //       });
+  //     }
+
+  //   // Hash/encrypt the password
+  //   const randomSalt = await bcrypt.genSalt(10);
+  //   const hashPassword = await bcrypt.hash(password, randomSalt);
+
+  //   //If proper data
+  //   const newProduct = new productModels({
+  //     //fields : valuse reciveced from user
+  //     productName: Name,
+  //     productDescription: description,
+  //     productPrice: price,
+  //     productCategory: hashPassword,
+  //     productImage: satisfies,
+  //   });
+
+  //   //6. Save in the database
+  //   await newProduct.save();
+
+  //   //7. Send a success reponse
+  //   res.json({
+  //     success: true,
+  //     message: "Product Created successfully!",
+  //   });
 };
 
 //exporting

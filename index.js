@@ -3,12 +3,16 @@ const express = require("express");
 const dotenv = require("dotenv");
 const connectDb = require("./database/database");
 const cors = require("cors");
+const fileupload = require("express-fileupload");
 
 // Creating an express app
 const app = express();
 
 // json Config
 app.use(express.json());
+
+// fileupload config
+app.use(fileupload());
 
 //Cors config
 const corsOptions = {
@@ -39,6 +43,7 @@ app.get("/test_new", (req, res) => {
 
 // configuring user routes
 app.use("/api/user", require("./routes/userRoutes"));
+app.use("/api/product", require("./routes/productRoutes"));
 // http://localhost:5000/api/user/create
 
 // Starting the server

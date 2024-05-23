@@ -3,21 +3,30 @@ const mongoose = require("mongoose");
 //making schema
 
 const productSchema = new mongoose.Schema({
-  Name: {
+  productName: {
     type: String,
     required: true,
   },
-  description: {
+  productDescription: {
+    type: String,
+    required: true,
+    maxlength: 300,
+  },
+  productPrice: {
+    type: Number,
+    required: true,
+  },
+  productCategory: {
     type: String,
     required: true,
   },
-  price: {
+  productImage: {
     type: String,
     required: true,
   },
-  category: {
-    type: String,
-    required: true,
+  createAt: {
+    type: Date,
+    default: Date.now,
   },
 });
 
