@@ -1,5 +1,6 @@
 // Make a function (logic)
 const productModels = require("../models/productModels");
+const path = require("path");
 // const bcrypt = require("bcrypt");
 // 1. Creating User Function
 
@@ -39,7 +40,38 @@ const createProduct = async (req, res) => {
   // 1. Generating unique name for each file
   const imageName = `${Date.now()}-${productImage.name}`;
   // 2. Define Specific Path
+  const imageUploadPath = path.join(
+    __dirname,
+    `../public/products/${imageName}`
+  );
+
   // 3. Upload to that path (await | trycatch)
+  try {
+    await productImage.mv(imageUploadPath);
+
+    // Save to database
+    const newProduct = new productModels({
+      productName: productName,
+      productPrice: productPrice,
+      productCategory: productCategory,
+      productDescription: productDescription,
+      productImage: imageName,
+    });
+
+    const product = await newProduct.save();
+    res.status(201).json({
+      success: true,
+      message: "Product Created!",
+      data: product,
+    });
+  } catch (error) {
+    console.log(error);
+    res.json({
+      success: false,
+      message: "Internal server error",
+      error: error,
+    });
+  }
 
   //   // Try - Catch (Error Handling)
   //   else
