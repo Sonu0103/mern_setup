@@ -1,4 +1,5 @@
 // Make a function (logic)
+const { get } = require("http");
 const productModels = require("../models/productModels");
 const path = require("path");
 // const bcrypt = require("bcrypt");
@@ -72,55 +73,26 @@ const createProduct = async (req, res) => {
       error: error,
     });
   }
-
-  //   // Try - Catch (Error Handling)
-  //   else
-  //     try {
-  //       //4. Check existing product
-  //       //check if the user is already exists
-  //       const existingProduct = await productModels.findOne({ Name: Name });
-
-  //       //4.1 if yes : Send response and stop the process
-  //       if (existingProduct) {
-  //         return res.json({
-  //           success: false,
-  //           message: "Product already exists!",
-  //         });
-  //       }
-  //       //5. if not:
-  //     } catch (error) {
-  //       console.log(error);
-  //       res.json({
-  //         success: false,
-  //         message: "Internal Server Error!",
-  //       });
-  //     }
-
-  //   // Hash/encrypt the password
-  //   const randomSalt = await bcrypt.genSalt(10);
-  //   const hashPassword = await bcrypt.hash(password, randomSalt);
-
-  //   //If proper data
-  //   const newProduct = new productModels({
-  //     //fields : valuse reciveced from user
-  //     productName: Name,
-  //     productDescription: description,
-  //     productPrice: price,
-  //     productCategory: hashPassword,
-  //     productImage: satisfies,
-  //   });
-
-  //   //6. Save in the database
-  //   await newProduct.save();
-
-  //   //7. Send a success reponse
-  //   res.json({
-  //     success: true,
-  //     message: "Product Created successfully!",
-  //   });
+};
+// fetch all products
+const getAllProducts = async (req, res) => {
+  // # Try Catch
+  try {
+    // 1.find all the products
+    const products = await productModels.find({});
+    // 2.send response
+    res.status(201).json({
+      success: true,
+      message: "product fetched Successfully!",
+      products: products,
+    });
+  } catch (error) {
+    console.log(error);
+  }
 };
 
 //exporting
 module.exports = {
   createProduct,
+  getAllProducts,
 };
