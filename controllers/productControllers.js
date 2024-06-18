@@ -176,19 +176,19 @@ const updateProduct = async (req, res) => {
         // delete from file system
         fs.unlinkSync(oldImagePath);
       }
-      // update in database
-      const updatedProduct = await productModels.findByIdAndUpdate(
-        req.params.id,
-        req.body
-      );
-
-      // send a RESPONSE
-      res.status(201).json({
-        success: true,
-        message: "Product Updated",
-        updatedProduct: updatedProduct,
-      });
     }
+    // update in database
+    const updatedProduct = await productModels.findByIdAndUpdate(
+      req.params.id,
+      req.body
+    );
+
+    // send a RESPONSE
+    res.status(201).json({
+      success: true,
+      message: "Product Updated",
+      updatedProduct: updatedProduct,
+    });
   } catch (error) {
     console.log(error);
     res.status(500).json({

@@ -12,20 +12,23 @@ router.post("/create", productControllers.createProduct);
 // http:localhost:5000/api/product/get_all_products
 router.get(
   "/get_all_products",
-  authGuard,
 
   productControllers.getAllProducts
 );
 
 // fetch single product
 // if POST, body(data)
-router.get("/get_single_product/:id", authGuard, productControllers.getProduct);
+router.get("/get_single_product/:id", productControllers.getProduct);
 
 // delete product
-router.delete("/delete_product/:id", adminGuard, productControllers.deleteProduct);
+router.delete(
+  "/delete_product/:id",
+  adminGuard,
+  productControllers.deleteProduct
+);
 
 // update product
-router.put("/update_product/:id", adminGuard, productControllers.updateProduct);
+router.put("/update_product/:id", productControllers.updateProduct);
 
 //exporting
 module.exports = router;
