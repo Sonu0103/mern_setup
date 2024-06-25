@@ -4,7 +4,7 @@ const dotenv = require("dotenv");
 const connectDb = require("./database/database");
 const cors = require("cors");
 const fileupload = require("express-fileupload");
-
+const path = require("path");
 // Creating an express app
 const app = express();
 
@@ -55,3 +55,6 @@ app.listen(PORT, () => {
 
 // API URL
 // http://localhost:5000/test
+
+// exporting for testing
+module.exports = app;

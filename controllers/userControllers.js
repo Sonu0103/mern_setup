@@ -9,8 +9,8 @@ const createUser = async (req, res) => {
   console.log(req.body);
 
   // destructuring
-  const { firstName, lastName, email, password } = req.body;
-  if (!firstName || !lastName || !email || !password) {
+  const { firstName, lastName, email, password, phone } = req.body;
+  if (!firstName || !lastName || !email || !password || !phone) {
     return res.json({
       sucess: false,
       message: "please enter all fields!",
@@ -34,6 +34,7 @@ const createUser = async (req, res) => {
       lastName: lastName,
       email: email,
       password: hashPassword,
+      phone: phone,
     });
 
     // Saving the data in database
@@ -105,6 +106,43 @@ const loginUser = async (req, res) => {
     });
   }
 };
+// forget password using Phone Number
+const forgetPassword = async (req, res) => {
+  const { phone } = req.body;
+
+  if (!phone) {
+    res.status(400).json({
+      success: false,
+      message: "Please provide phone number",
+    });
+  }
+  try {
+    // if user find and validate
+    const user = await userModel.findOne({ phone: phone });
+    if (!user) {
+      return res.status(400).json({
+        success: false,
+        message: "User not Found",
+      });
+    }
+    // generate random otp
+    const otp = Math.floor(100000 + Math.random() * 900000); // 6 digit otp
+
+    // update in database for varification
+    user.otpReset = otp;
+    user.otpResetExpires = Date.now() + 3600000;
+    await user.save();
+
+    // sending otp to phone number
+  } catch (error) {
+    console.log(error);
+    res.json({
+      success: false,
+      message: " Server Error!",
+    });
+  }
+};
+
 // exporting the createuse
 module.exports = {
   createUser,

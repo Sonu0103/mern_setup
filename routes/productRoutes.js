@@ -18,7 +18,7 @@ router.get(
 
 // fetch single product
 // if POST, body(data)
-router.get("/get_single_product/:id", productControllers.getProduct);
+router.get("/get_single_product/:id", authGuard, productControllers.getProduct);
 
 // delete product
 router.delete(
@@ -28,7 +28,11 @@ router.delete(
 );
 
 // update product
-router.put("/update_product/:id", productControllers.updateProduct);
+router.put("/update_product/:id", adminGuard, productControllers.updateProduct);
+
+// Pagination
+router.get("/update_product/:id", authGuard, productControllers.updateProduct);
+router.get("/pagination", productControllers.productPagination);
 
 //exporting
 module.exports = router;
